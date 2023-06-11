@@ -20,7 +20,6 @@ public class CustomerDaoImpl implements CustomerDao{
     private SessionFactory sessionFactory;
 
     @Override
-    @Transactional
     public List<Customer> getCustomers() {
 
         Session session =sessionFactory.openSession();
@@ -36,7 +35,6 @@ public class CustomerDaoImpl implements CustomerDao{
         tx.commit();
         session.close();
 
-        // return the result
         return customers;
     }
 }
