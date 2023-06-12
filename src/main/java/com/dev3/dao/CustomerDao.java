@@ -7,4 +7,8 @@ import java.util.List;
 public interface CustomerDao {
 
     public List<Customer> getCustomers();
+
+    void saveCustomerDao(Customer theCustomer);
+
+    Customer getCustomer(int theId);
 }

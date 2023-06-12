@@ -37,4 +37,35 @@ public class CustomerDaoImpl implements CustomerDao{
 
         return customers;
     }
+
+    @Override
+    public void saveCustomerDao(Customer theCustomer) {
+        // get current hibernate session
+        Session session =sessionFactory.openSession();
+        Transaction tx =session.beginTransaction();
+
+        session.saveOrUpdate(theCustomer);
+
+        tx.commit();
+        session.close();
+    }
+
+    @Override
+    public Customer getCustomer(int theId) {
+
+        //get the current hibernate session
+
+        //now retrieve/read form database using the primary key
+
+        Session session =sessionFactory.openSession();
+        Transaction tx =session.beginTransaction();
+
+        Customer theCustomer = session.get(Customer.class,theId);
+
+        tx.commit();
+        session.close();
+
+
+        return theCustomer;
+    }
 }
