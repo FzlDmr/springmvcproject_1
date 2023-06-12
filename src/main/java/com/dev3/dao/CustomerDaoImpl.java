@@ -8,12 +8,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public class CustomerDaoImpl implements CustomerDao{
+public class CustomerDaoImpl implements CustomerDao {
 
     //need to inject the session factory
     @Autowired
@@ -22,13 +20,13 @@ public class CustomerDaoImpl implements CustomerDao{
     @Override
     public List<Customer> getCustomers() {
 
-        Session session =sessionFactory.openSession();
-        Transaction tx =session.beginTransaction();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
-        String hqlQuery="from Customer";
-        List<Customer> customers =  session.createQuery(hqlQuery,Customer.class).getResultList();
+        String hqlQuery = "FROM Customer";
+        List<Customer> customers = session.createQuery(hqlQuery, Customer.class).getResultList();
 
-        for (Customer w : customers){
+        for (Customer w : customers) {
             System.out.println(w);
         }
 
@@ -41,8 +39,8 @@ public class CustomerDaoImpl implements CustomerDao{
     @Override
     public void saveCustomerDao(Customer theCustomer) {
         // get current hibernate session
-        Session session =sessionFactory.openSession();
-        Transaction tx =session.beginTransaction();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
         session.saveOrUpdate(theCustomer);
 
@@ -57,15 +55,31 @@ public class CustomerDaoImpl implements CustomerDao{
 
         //now retrieve/read form database using the primary key
 
-        Session session =sessionFactory.openSession();
-        Transaction tx =session.beginTransaction();
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
 
-        Customer theCustomer = session.get(Customer.class,theId);
+        Customer theCustomer = session.get(Customer.class, theId);
+
+        tx.commit();
+        session.close();
+
+        return theCustomer;
+    }
+
+    @Override
+    public void deleteCustomer(int theId) {
+
+        Session session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+
+        Query theQuery = session.createQuery("delete from Customer where id=:customerId");
+        theQuery.setParameter("customerId", theId);
+        theQuery.executeUpdate();
+
 
         tx.commit();
         session.close();
 
 
-        return theCustomer;
     }
 }
